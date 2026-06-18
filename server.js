@@ -2,7 +2,9 @@ const express= require('express');
 const app=express();
 const moongose=require('mongoose')
 require('dotenv').config();
+const multer=require('multer')
 
+const uploads=multer({dest:'./uploads'});
 const dbConnection=moongose.connect('mongodb://localhost:27017/node_crud');
 dbConnection.then((d)=>{
     console.log('Connec to Db');
@@ -12,8 +14,12 @@ dbConnection.then((d)=>{
 }).catch((err)=>{
     console.log('error',err)
 })
-app.get('/',(req,res)=>{
-  res.send("Hi")
+app.post('/',uploads.single('myFile'),(req,res)=>{
+  res.send("file Upload Successfully");
+})
+app.post('/uploads',uploads.single('myFile'),(req,res)=>{
+    console.log(req.file)
+  res.send("file Upload Successfully");
 })
 let port=3000;
 app.listen(port,()=>{
