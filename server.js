@@ -21,6 +21,27 @@ app.post('/uploads',uploads.single('myFile'),(req,res)=>{
     console.log(req.file)
   res.send("file Upload Successfully");
 })
+app.post('/custome-uploads',uploads.single('myFile'),(req,res)=>{
+    console.log(req.file)
+  res.send("file Upload Successfully");
+})
+
+// Upload Image with Disk Storage
+
+const storage=multer.diskStorage({
+    destination:(req,file,cb)=>{
+       cb(null,'./uploads');
+    },
+    filename:(req,file,cb)=>{
+        cb(null,Math.random() + file.originalname);
+    }
+})
+const image=multer({storage:storage})
+app.post('/disk-img',image.single('myFile'),(req,res)=>{
+    console.log(req.file)
+  res.send("file Upload Successfully");
+})
+
 let port=3000;
 app.listen(port,()=>{
     console.log(`Server is Running On Port ${port}`);
